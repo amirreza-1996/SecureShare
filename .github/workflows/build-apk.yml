@@ -24,7 +24,15 @@ jobs:
         run: |
           rm -rf buildsrc
           mkdir buildsrc
-          unzip -q SecureShare-Android-Source.zip -d buildsrc
+
+          SRC=$(find . -maxdepth 1 -name 'SecureShare-Android-Source-v*.zip' -printf '%f\n' | sort -V | tail -1)
+
+          if [ -z "$SRC" ]; then
+            SRC="SecureShare-Android-Source.zip"
+          fi
+
+          echo "Building from: $SRC"
+          unzip -q "$SRC" -d buildsrc
 
       - name: Set up Java 21
         uses: actions/setup-java@v5
